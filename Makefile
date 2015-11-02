@@ -1,22 +1,29 @@
-NAME	=	libmy.a
-SRC 	=	$(wildcard *.c)
-OBJ 	=	$(SRC:%.c=%.o)
-CC		=	gcc
-RM		=	rm -f
-CFLAGS	=	-W -Wall -ansi -pedantic -Werror
-LDFLAGS = -L. -lmy
+NAME    :=  libmy.a
+SRC     :=  $(wildcard src/*.c)
+ODIR    :=  obj
+OBJ     :=  $(SRC:src/%.c=$(ODIR)/%.o)
+CFLAGS  :=  -W -Wall -ansi -pedantic -Werror
+ARFLAGS :=  -rc
 
-$(NAME):	$(OBJ)
-			$(CC) -c $(SRC)
-			ar r $(NAME) $(OBJ) 
-			ranlib $(NAME)
+.PHONY: all clean fclean re libmy
 
-all:		$(NAME)
-	
+all: libmy
+
+libmy: $(NAME)
+
+$(NAME): $(OBJ)
+	$(AR) $(ARFLAGS) $@ $^ 
+
+$(ODIR)/%.o: src/%.c | $(ODIR)
+	$(CC) $(LDFLAGS) $(CFLAGS) -o $@ -c $<
+
+$(ODIR):
+	@mkdir $@ 
+
 clean:
-			$(RM) $(OBJ)
-	
-fclean:		clean
-			$(RM) $(NAME)
+	$(RM) -r $(ODIR)
 
-re:			fclean all	
+fclean: clean
+	$(RM) -r $(NAME)
+
+re: fclean all
