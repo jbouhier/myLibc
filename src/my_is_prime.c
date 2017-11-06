@@ -12,11 +12,11 @@
 
 int		my_is_prime(int nombre)
 {
-	int		i;
-
-	if (nombre <= 1)
-		return (0);
-	for (i = 2; i < nombre; i++)
+	if (nombre < 2) return (0);
+	
+	int i, j=(nombre/2)+1;
+	
+	for (i = 2; i < j; i++)
 	{
 		if (nombre % i == 0)
 			return (0);
